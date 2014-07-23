@@ -4,8 +4,7 @@
 	"keywords": ["framework", "laravel"],
 	"license": "MIT",
 	"require": {
-		"laravel/framework": "4.2.*",
-		"twbs/bootstrap": "3.2.*@dev"
+		"laravel/framework": "4.2.*"
 	},
 	"autoload": {
 		"classmap": [
