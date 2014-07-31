@@ -24,9 +24,87 @@ Route::get('/login', function()
 });
 
 
-Route::get('/portfolio', function()
+Route::get('/portfolio', array('before' => 'auth', function()
 {
-	return View::make('portfolio');
+	 return View::make('portfolio');
+}));
+
+
+/*-------------------------------------------------------------------------------------------------
+// !post login
+-------------------------------------------------------------------------------------------------*/
+Route::post('/portfolio', array('before' => 'csrf', function() {
+
+	if(Input::only('search_id') == null)
+		return 'InSearchStock';
+
+	return Input::only('id');
+	// return Redirect::to('portfolio');
+
+}));
+
+
+Route::post('/socksearch', function() {
+
+	$httpreq = 'http://finance.yahoo.com/d/quotes.csv?s=';
+	$firstSet = false;
+	for($i=1; $i<=5; ++$i)
+	{
+		$currID = "Stock";
+		$currID.=$i;
+		$stockID = Input::get($currID);
+		if(!is_null($stockID))
+		{
+			if($firstSet == true)
+			{
+				$httpreq.="+";
+			}
+
+			$firstSet = true;
+			$httpreq.=$stockID;
+		}
+
+	}
+
+	$return = "";
+	$httpreq.="&f=snl1";
+	$firstSet = false;
+	$json = file_get_contents($httpreq);
+
+
+	$data = explode("\n",$json);
+
+	$data_count = count($data)-1;
+
+	for($j=0; $j<$data_count; ++$j)
+	{
+		$data_stock = explode("\",",$data[$j]);	
+
+		if($firstSet==true)
+		{
+			$return.="+";
+
+			//if(floatval($data_stock['2']))
+				$return.=$data_stock['2'];
+		//	elseif(floatval($data_stock['3']))
+			//	$return.=$data_stock['3'];
+		}
+		else
+		{
+		//	if(floatval($data_stock['2']))
+				$return=$data_stock['2'];
+			//elseif(floatval($data_stock['3']))
+			//	$retur.=$data_stock['3'];
+
+			$firstSet = true;
+		}
+	
+	
+	}
+	
+
+	return $return;
+
 });
 
 /*-------------------------------------------------------------------------------------------------
@@ -97,6 +175,15 @@ Route::post('/signup', array('before' => 'csrf', function() {
 }));
 
 
+
+Route::post('/buy', array('before' => 'csrf', 'before' => 'auth', function() {
+	
+	$userStocks = new User_stock();
+	$userStocks->stock_id = Input::get('id_buy_stock');
+	$userStocks->num_units = Input::get('id_buy_units');
+
+	return Redirect::to('/portfolio')->with('flash_message', 'Welcome to PlayStock!');
+}));
 
 /*-------------------------------------------------------------------------------------------------
 // !Debug

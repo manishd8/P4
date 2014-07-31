@@ -9,6 +9,8 @@
 		<link href="css/bootstrap.css" rel="stylesheet" media="screen">
 		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 
+		@yield('ajax')
+
 	</head>
 
 
@@ -54,7 +56,7 @@
 
 								<div class="col-md-3 navbar-header">
 									@if(Auth::check())
-										<a class="navbar-brand">Welcome <?php echo Auth::user()['FirstName']; echo Auth::user()['LastName']; ?></a>
+										<a class="navbar-brand">Welcome <?php echo Auth::user()['FirstName'];?> <?php echo Auth::user()['LastName']; ?></a>
 									@endif
 								</div>
 								<div class="col-md-2">
