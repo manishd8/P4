@@ -26,7 +26,30 @@ Route::get('/login', function()
 
 Route::get('/portfolio', array('before' => 'auth', function()
 {
-	 return View::make('portfolio');
+	$UsrStocks = DB::table('userstocks')->where('user_id', Auth::user()['id'])->get();
+
+	$retuenArray = array();
+	foreach($UsrStocks as $UsrStock) {
+		$values = array();
+		$Stock = DB::table('stocks')->where('id', $UsrStock->stock_id)->first();
+    	array_push($values, $Stock->stock_name);
+    	array_push($values, $Stock->stock_symb);
+
+	    $httpreq = 'http://finance.yahoo.com/d/quotes.csv?s=';
+	    $httpreq.=$Stock->stock_symb;
+	    $httpreq.="&f=snl1";
+	    $json = file_get_contents($httpreq);
+	    $data = explode("\n",$json);
+	    $data_stock = explode("\",",$data['0']);	
+
+	    array_push($values, $data_stock['2']);
+	    array_push($values, $UsrStock->num_units);
+	
+	    array_push($retuenArray, $values);
+	}
+
+	return View::make('portfolio')->with('User_Stocks', $retuenArray)
+								  ->with('AccountCash' , Auth::user()['Cash']);
 }));
 
 
@@ -39,10 +62,18 @@ Route::post('/portfolio', array('before' => 'csrf', function() {
 		return 'InSearchStock';
 
 	return Input::only('id');
-	// return Redirect::to('portfolio');
 
 }));
 
+
+Route::post('/searchStockName', function() {
+	$st_sym = Input::get('Stock_Str');
+
+	$serStk = DB::table('stocks')->where('stock_symb', $st_sym)->pluck('stock_name');
+	
+	return $serStk;
+
+});
 
 Route::post('/socksearch', function() {
 
@@ -83,19 +114,11 @@ Route::post('/socksearch', function() {
 		if($firstSet==true)
 		{
 			$return.="+";
-
-			//if(floatval($data_stock['2']))
-				$return.=$data_stock['2'];
-		//	elseif(floatval($data_stock['3']))
-			//	$return.=$data_stock['3'];
+			$return.=$data_stock['2'];
 		}
 		else
 		{
-		//	if(floatval($data_stock['2']))
-				$return=$data_stock['2'];
-			//elseif(floatval($data_stock['3']))
-			//	$retur.=$data_stock['3'];
-
+			$return=$data_stock['2'];
 			$firstSet = true;
 		}
 	
@@ -155,7 +178,7 @@ Route::post('/signup', array('before' => 'csrf', function() {
 	$user->FirstName    	 = Input::get('FirstName');
 	$user->LastName    		 = Input::get('LastName');
 	$user->Title    		 = Input::get('Title');
-	$user->Cash    		     = '10000.00';
+	$user->Cash    		     = '100000.00';
 	$user->password 		 = Hash::make(Input::get('password'));
 
 
@@ -178,11 +201,37 @@ Route::post('/signup', array('before' => 'csrf', function() {
 
 Route::post('/buy', array('before' => 'csrf', 'before' => 'auth', function() {
 	
-	$userStocks = new User_stock();
-	$userStocks->stock_id = Input::get('id_buy_stock');
-	$userStocks->num_units = Input::get('id_buy_units');
+	$st_sym = Input::get('StockToBuy');
+	$serStk = DB::table('stocks')->where('stock_symb', $st_sym)->first()->id;
 
-	return Redirect::to('/portfolio')->with('flash_message', 'Welcome to PlayStock!');
+
+
+	$userStocks = new Userstock();
+	
+	$userStocks->stock_id = $serStk;
+	$userStocks->num_units = Input::get('UnitsToBuy');
+	$userStocks->user_id = Auth::user()['id'];
+
+	$httpreq = 'http://finance.yahoo.com/d/quotes.csv?s=';
+    $httpreq.=$st_sym;
+    $httpreq.="&f=snl1";
+    $json = file_get_contents($httpreq);
+    $data = explode("\n",$json);
+    $data_stock = explode("\",",$data['0']);	
+
+    $AccountCash = Auth::user()['Cash'];
+
+    $totalCost = $data_stock['2']*Input::get('UnitsToBuy');
+    if($totalCost<$AccountCash)
+    {
+    	$userStocks->save();
+    	DB::table('users')
+            ->where('id',  Auth::user()['id'])
+            ->update(array('Cash' => ($AccountCash-$totalCost)));
+    }
+
+	
+	return Redirect::to('/portfolio');
 }));
 
 /*-------------------------------------------------------------------------------------------------

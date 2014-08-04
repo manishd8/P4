@@ -37,7 +37,7 @@ class CreateStocksTable extends Migration {
 		});
 
 		# Create the authors table
-		Schema::create('user_stocks', function($table) {
+		Schema::create('userstocks', function($table) {
 
 			# AI, PK
 			$table->increments('id');
@@ -66,7 +66,7 @@ class CreateStocksTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('user_stocks');
+		Schema::drop('userstocks');
 		Schema::drop('stocks');
 	}
 

@@ -9,4 +9,5 @@ public function users() {
         return $this->belongsToMany('User');
     }
 
+public $timestamps = false; 
 }
