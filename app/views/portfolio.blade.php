@@ -96,39 +96,103 @@
 
 		}
 
+		function Sell_Stock(){
+
+			 // Create our XMLHttpRequest object
+		    var hr = new XMLHttpRequest();
+
+		   	var url = "sell";
+		    hr.open("POST", url, true);
+
+		    hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+			var j =1;
+		    var postData = "&YESSSS=1";
+		   // alert(postData);
+		    // var topDivElement = document.getElementById("Sell_Body_div");
+		    // var rows = document.getElementById("PortfolioTable").rows;
+		    // for(var i=1; i<rows.length; ++i) { 
+		    // 	var currCheck_id =  "StockToSell_id"+i; 
+		    // 	var currCheckBox = document.getElementById(currCheck_id).checked;
+  				// if(currCheckBox==true)
+  				// {
+  				// 	var td_Sell_Units_id =  "td_sell_st_units"+i;
+  				// 	var td_st_symb_id = "td_st_symb"+i;
+  				// 	var currSymb = document.getElementById(td_st_symb_id).textContent;
+  				// 	var currUnits = document.getElementById(td_Sell_Units_id).value;
+
+  				// 	if(j==1){
+  				// 		postData+=(currSymb+"="+currUnits)
+  				// 	}
+  				// 	else{
+  				// 		postData+=("&"+currSymb+"="+currUnits);
+  				// 		j++;
+  				// 	}
+  					
+  				// }
+		    // }
+
+		     hr.onreadystatechange = function() {
+			    if(hr.readyState == 4 && hr.status == 200) {
+			    }
+		    }
+		    hr.send(postData);
+
+		}
+
+
 		function Create_SellPage(){
 			var User_Stocks_ToSell;
 			var rows = document.getElementById("PortfolioTable").rows;
 			var j =1;
+
+			var topDivElement = document.getElementById("Sell_Body_div");
+		
+			var parentNode = topDivElement.parentNode;
+			parentNode.removeChild(topDivElement);
+
+			topDivElement = document.createElement("div");
+			topDivElement.setAttribute("class", "row form-inline");
+			topDivElement.setAttribute("id", "Sell_Body_div");
+			parentNode.appendChild( topDivElement );
 
 	  		for(var i=1; i<rows.length; ++i) { 
 	  				var currCheck_id =  "StockToSell_id"+i; 
 
 	  				var td_stName_id =  "td_st_name"+i; 
 	  				var td_Price_id =  "td_st_price"+i; 
-	  				
+	  				var td_Units_id =  "td_st_units"+i; 
+	  				var td_Sell_Units_id =  "td_sell_st_units"+i;
+	  				var td_st_symb_id = "td_st_symb"+i;
 
 	  				var currCheckBox = document.getElementById(currCheck_id).checked;
 
 	  				if(currCheckBox==true)
 	  				{
 	  					var name = document.getElementById(td_stName_id).textContent;		
-	  					var currPrice = document.getElementById(td_Price_id).textContent;							
+	  					var currPrice = document.getElementById(td_Price_id).textContent;	
+	  					var numUnits = document.getElementById(td_Units_id).textContent;		
+	  					var stkSymb = document.getElementById(td_st_symb_id).textContent;					
 
 						var div1 = document.createElement("div");
 						div1.setAttribute("class", "col-md-12");
 
 						var div11 = document.createElement("div");
-						div11.setAttribute("class", "col-md-8");
+						div11.setAttribute("class", "col-md-6");
 
 						var div12 = document.createElement("div");
-						div12.setAttribute("class", "col-md-4");
+						div12.setAttribute("class", "col-md-2");
+
+						var div13 = document.createElement("div");
+						div13.setAttribute("class", "col-md-4");
+
 
 						var mybr1 = document.createElement("br");
 						var mybr3 = document.createElement("br");
 						var mybr2 = document.createElement("br");
 						div1.appendChild( div11 );
 						div1.appendChild( div12 );
+						div1.appendChild( div13 );
 
 						var input11 = document.createElement("output");
 						input11.setAttribute("class", "btn-info");
@@ -146,30 +210,28 @@
 
 						div12.appendChild( input12 );
 
+						var utName = "units"+i;
+						var input13 = document.createElement("input");
+						input13.setAttribute("type", "number");
+						input13.setAttribute("name", stkSymb);
+						input13.setAttribute("min", 1);
+						input13.setAttribute("max", numUnits);
+						input13.setAttribute("class", "form-control form-group input-sm");
+						input13.setAttribute("data-bind", "value:replyNumber");
+						input13.setAttribute("id", "td_Sell_Units_id");
+						input13.setAttribute("value", numUnits);
 
-						document.getElementById("Sell_Body_div").appendChild(div1);
-						document.getElementById("Sell_Body_div").appendChild(mybr1);
-						document.getElementById("Sell_Body_div").appendChild(mybr2);
-						document.getElementById("Sell_Body_div").appendChild(mybr3);
+						div13.appendChild( input13 );
 
-		
 
-						// <div class="col-md-12">
-
-						// 	<div class="col-md-8">
-						// 		<input type="text" class="form-control form-group" id="stock_id1" name="Stock1" placeholder="Stock Name">
-						// 	</div>
-
-						// 	<div class="col-md-2">
-						// 		<output class="btn-info" id="stock_val1">$ 0.00</output>
-						// 	</div>
-					
-						// </div></br></br></br>
-
+						topDivElement.appendChild(div1);
+						topDivElement.appendChild(mybr1);
+						topDivElement.appendChild(mybr2);
+						topDivElement.appendChild(mybr3);
 	  				}
 	  		}
 
-	  		// var newPara = document.createElement("p");
+	  		// var newPara = document.createElement("p");min="1" max="5"
 	  		// var add_news = document.createTextNode("The latest news goes here.");
 	  		// newPara.appendChild( add_news );
 	  		// var txt1 = "<p>Text.</p>"; 
@@ -211,9 +273,9 @@
 						<div class="col-md-10">
 							<table class="table table-condensed" id="PortfolioTable">
 								  <thead>
-								  		<tr class="info">
+								  		<tr class="warning">
 								  				<th class="text-center"><label><input type="checkbox"></label></th>
-								  				<th class="text-center">Row</th>
+								  				<th class="text-center">#</th>
 								  				<th class="text-center">Stock Name</th>
 								  				<th class="text-center">Stock Symbol</th>
 								  				<th class="text-center">Current Price</th>
@@ -239,9 +301,11 @@
 								  				$td_st_price_id =  "td_st_price"; 
 								  				$td_st_price_id.=$i; 
 								  				
+								  				$td_st_units_id =  "td_st_units"; 
+								  				$td_st_units_id.=$i;
 								  				?> 
 
-										  		<tr class="danger text-center">
+										  		<tr class="success text-center">
 										  			<td>
 										  				<label>
 										  					<input type="checkbox" id="<?php echo $currCheck_id ?>">
@@ -251,7 +315,7 @@
 										            <td id="<?php echo $td_st_name_id ?>"><?php echo $User_Stock['0'] ?></td>
 										            <td id="<?php echo $td_st_symb_id ?>"><?php echo $User_Stock['1'] ?></td>
 										            <td id="<?php echo $td_st_price_id ?>"><?php echo $User_Stock['2'] ?></td>
-										            <td><?php echo $User_Stock['3'] ?></td>
+										            <td id="<?php echo $td_st_units_id ?>"><?php echo $User_Stock['3'] ?></td>
 										            <td>$ <?php echo $User_Stock['2'] * $User_Stock['3'] ?></td>
 										        </tr>
 										 <?php  $i++; } ?>
@@ -308,42 +372,19 @@
 				</div>
 
 				<div class="modal-body">
-					
+					{{ Form::open(array('url' => '/sell','method' => 'post')) }}
 						<fieldset >								
 							
 								<div class="row form-inline" id="Sell_Body_div">
-									
-									<!-- <div class="col-md-12">
-
-										<div class="col-md-8">
-											<input type="text" class="form-control form-group" id="stock_id1" name="Stock1" placeholder="Stock Name">
-										</div>
-
-										<div class="col-md-2">
-											<output class="btn-info" id="stock_val1">$ 0.00</output>
-										</div>
-								
-									</div></br></br></br>
-
-									<div class="col-md-12">
-
-										<div class="col-md-8">
-											<input type="text" class="form-control form-group" id="stock_id2" name="Stock2" placeholder="Stock Name">
-										</div>
-
-										<div class="col-md-2">
-											<output class="btn-info" id="stock_val2">$ 0.00</output>
-										</div>
-								
-									</div></br></br></br> -->
 								</div>								
 							
 						</fieldset>					
 
 						<div class="pull-right">
-							<input name="Search" class="btn btn-success" type="submit" value="Sell Stock" onClick="javascript:ajax_post();">
+							<input class="btn btn-success" type="submit" value="Sell Stock" onClick="javascript:Sell_Stock();" >
 							<button class="btn btn-danger" data-dismiss="modal" aria-hidden="false">cancel</button>
-						</div></br>					
+						</div></br>		
+					{{ Form::close()}}			
 				</div>
 
 				<div class="modal-footer">

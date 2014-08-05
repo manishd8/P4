@@ -25,7 +25,7 @@
 							<nav class="navbar navbar-default">
 								<div class="col-md-7">
 									<div class="navbar-header">
-											<a href="#" class="navbar-brand">StockPlay</a>
+											<a href="#" class="navbar-brand">LiveStock</a>
 									</div>
 
 									<ul class="nav navbar-nav">

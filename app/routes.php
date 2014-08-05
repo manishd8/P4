@@ -204,13 +204,11 @@ Route::post('/buy', array('before' => 'csrf', 'before' => 'auth', function() {
 	$st_sym = Input::get('StockToBuy');
 	$serStk = DB::table('stocks')->where('stock_symb', $st_sym)->first()->id;
 
-
-
-	$userStocks = new Userstock();
+	$userStocks = DB::table('userstocks')
+            ->where('user_id',  Auth::user()['id'])
+            ->where('stock_id',  $serStk)
+            ->first();
 	
-	$userStocks->stock_id = $serStk;
-	$userStocks->num_units = Input::get('UnitsToBuy');
-	$userStocks->user_id = Auth::user()['id'];
 
 	$httpreq = 'http://finance.yahoo.com/d/quotes.csv?s=';
     $httpreq.=$st_sym;
@@ -224,7 +222,25 @@ Route::post('/buy', array('before' => 'csrf', 'before' => 'auth', function() {
     $totalCost = $data_stock['2']*Input::get('UnitsToBuy');
     if($totalCost<$AccountCash)
     {
-    	$userStocks->save();
+    	if(is_null($userStocks))
+		{
+			$userStocks = new Userstock();
+
+			$userStocks->stock_id = $serStk;
+			$userStocks->num_units = Input::get('UnitsToBuy');
+			$userStocks->user_id = Auth::user()['id'];
+			$userStocks->save();
+		}
+		else
+		{
+			$currUnits = $userStocks->num_units + Input::get('UnitsToBuy');
+			$userStocks = DB::table('userstocks')
+            ->where('user_id',  Auth::user()['id'])
+            ->where('stock_id',  $serStk)
+            ->update(array('num_units' => $currUnits));
+		}
+
+    	
     	DB::table('users')
             ->where('id',  Auth::user()['id'])
             ->update(array('Cash' => ($AccountCash-$totalCost)));
@@ -233,6 +249,64 @@ Route::post('/buy', array('before' => 'csrf', 'before' => 'auth', function() {
 	
 	return Redirect::to('/portfolio');
 }));
+
+
+Route::post('/sell', array('before' => 'csrf', 'before' => 'auth', function() {
+	
+
+	$AccountCash = Auth::user()['Cash'];
+	$Stocks = Input::all();
+	$i=0;
+	foreach ($Stocks as $stock => $units) {
+		if($stock=="_token" || $units<1){
+			continue;
+		}
+
+		$httpreq = 'http://finance.yahoo.com/d/quotes.csv?s=';
+	    $httpreq.=$stock;
+	    $httpreq.="&f=snl1";
+	    $json = file_get_contents($httpreq);
+	    $data = explode("\n",$json);
+	    $data_stock = explode("\",",$data['0']);
+
+	   
+
+	    $stk_id = DB::table('stocks')->where('stock_symb', $stock)->first()->id;
+	    $oldUnits = DB::table('userstocks')
+            ->where('user_id',  Auth::user()['id'])
+            ->where('stock_id',  $stk_id)
+            ->first()->num_units;
+
+        if($units>$oldUnits)
+        	$units = $oldUnits;
+
+        $AccountCash+=($data_stock['2']*$units);
+        $newUnits = $oldUnits-$units;
+
+		if($newUnits==0){
+			$oldUnits = DB::table('userstocks')
+            ->where('user_id',  Auth::user()['id'])
+            ->where('stock_id',  $stk_id)
+            ->delete();
+		}
+		else{
+			DB::table('userstocks')
+            ->where('user_id',  Auth::user()['id'])
+            ->where('stock_id',  $stk_id)
+            ->update(array('num_units' => $newUnits));
+		}
+         
+
+	}
+
+	DB::table('users')
+            ->where('id',  Auth::user()['id'])
+            ->update(array('Cash' => $AccountCash));
+	
+	
+	return Redirect::to('/portfolio');
+}));
+
 
 /*-------------------------------------------------------------------------------------------------
 // !Debug
