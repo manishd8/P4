@@ -6,6 +6,7 @@
 
 
 @section('containerfooter')
+</br></br></br></br></br>
 	<div class="row" id="main-content">
 			<div class="col-md-4 pull-right" id="sidebar">
 

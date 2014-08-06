@@ -535,7 +535,6 @@
 
 										<div class="col-md-3">
 											<a class="btn btn-info" role="button" data-toggle="modal" href="javascript:buySearchPrice();">Search price</a>
-											<!-- <input name="Search" class="btn btn-info" value="Search price" onClick="buySearchPrice();"> -->
 										</div>
 
 										<div class="col-md-2 pull-right">
@@ -558,7 +557,7 @@
 										</div>
 
 										<div class="col-md-2 pull-right">
-											<input type="number" class="form-control form-group input-sm" id="id_buy_units" name="UnitsToBuy" data-bind="value:replyNumber" 
+											<input type="number" class="form-control form-group input-sm" id="id_buy_units" min="1" name="UnitsToBuy" data-bind="value:replyNumber" 
 													placeholder="# Units" onChange="ComputeTotal()">
 										</div>							
 									</div></br></br></br>
@@ -586,7 +585,6 @@
 						</fieldset>					
 
 						<div class="pull-right">
-							<!-- <a class="btn btn-success" role="button" data-toggle="modal" href="/buy">Buy Stock</a> -->
 							<input name="BuyStock" class="btn btn-success" type="submit" value="Buy Stock" href="/buy">
 							<button class="btn btn-danger" data-dismiss="modal" aria-hidden="false">cancel</button>
 						</div></br></br>

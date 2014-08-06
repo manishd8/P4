@@ -75,6 +75,54 @@ Route::post('/searchStockName', function() {
 
 });
 
+
+Route::post('/getStockPriceList', function() {
+
+
+
+	$httpreq = 'http://finance.yahoo.com/d/quotes.csv?s=';
+	$stkSymList = DB::table('stocks')->where('id', '>', 0)->where('id', '<', 100)->get();
+	$firstSet = false;
+	foreach ($stkSymList as $stkSym) {
+		if($firstSet == true)
+		{
+			$httpreq.="+";
+		}
+
+		$firstSet = true;
+		$httpreq.=$stkSym->stock_symb;
+	}
+
+	$httpreq.="&f=snl1";
+	$json = file_get_contents($httpreq);
+	$data = explode("\n",$json);
+
+	$return = "";
+	$data_count = count($data)-1;
+	$firstSet = false;
+	for($j=0; $j<$data_count; ++$j)
+	{
+		$data_stock = explode("\",",$data[$j]);	
+		if($firstSet==true)
+		{
+			$return.="+";
+			$return.=$data_stock['0'];
+			$return.="  =";
+			$return.=$data_stock['2'];
+		}
+		else
+		{
+			$return.=$data_stock['0'];
+			$return.="=";
+			$return.=$data_stock['2'];
+			$firstSet = true;
+		}
+	}
+
+	return $return;
+
+});
+
 Route::post('/socksearch', function() {
 
 	$httpreq = 'http://finance.yahoo.com/d/quotes.csv?s=';
