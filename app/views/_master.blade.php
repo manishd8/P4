@@ -101,7 +101,7 @@ body {
 							<nav class="navbar navbar-default">
 								<div class="col-md-7">
 									<div class="navbar-header">
-											<a class="navbar-brand">LiveStock</a>
+											<a class="navbar-brand"><b class="text-danger">LiveStock</b></a>
 									</div>
 
 									<ul class="nav navbar-nav">
@@ -185,7 +185,7 @@ body {
 							&times;
 						</button>
 
-						<h3 class="modal-title text-center" id="myModalLabel">About LiveStock</h3>
+						<h3 class="modal-title text-center" id="myModalLabel">About <b class="text-danger">LiveStock</b></h3>
 
 						
 					</div>
