@@ -248,7 +248,7 @@ body {
 
 											<div class="col-md-4 pull-right">
 												<label>
-													<output class="disabled" id="id_buy_text">9876543210</output>
+													<output class="disabled">9876543210</output>
 												</label>
 											</div>		
 										</div>	</br></br></br>			
@@ -263,7 +263,7 @@ body {
 
 											<div class="col-md-5 pull-right">
 												<label>
-													<output class="disabled" id="id_buy_text">manishgo81@gmail.com</output>
+													<output class="disabled">manishgo81@gmail.com</output>
 												</label>
 											</div>		
 										</div>	</br></br></br>				
