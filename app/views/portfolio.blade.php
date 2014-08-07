@@ -258,7 +258,11 @@
 	  		}
 
 	  		if(!isAnyChecked)
-	  			alert("Please check stock to sell");
+	  		{
+	  			alert("Please check stock to sell, cancel next window and start again!");
+	  			
+	  		}
+	  			
 		}
 
 		function OnCheckAllChange(){
@@ -316,7 +320,7 @@
 						<div class="col-md-10">
 							<table class="table table-condensed" id="PortfolioTable">
 								  <thead>
-								  		<tr class="warning">
+								  		<tr class="danger text-warning">
 								  				<th class="text-center"><label><input id="All_CheckBox_id" type="checkbox" onclick="OnCheckAllChange();"></label></th>
 								  				<th class="text-center">#</th>
 								  				<th class="text-center">Stock Name</th>
