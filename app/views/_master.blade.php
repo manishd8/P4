@@ -199,7 +199,7 @@ body {
 												<label>
 													<p class="text-justify"> 
 														<big>
-															<b class="text-danger">Livestock</b> is a portal which introduces a budding investor to the thrills & excitement of real time stock trading in a risk free environment. A user friendly tool, the portal provides virtual money which can be used for trading shares using their real time current prices, thus creating an understanding of the dynamics & the niftiness of the stock market. <b class="text-danger">Livestock</b> places the chip on the user's shoulder by creating a arina where learning is easy & getting a grasp on trading basics is done in an effective & enjoyable manner. The users inch forward into the real time trading world with added confidence & ever so needed sharpness.
+															<b class="text-danger">Livestock</b> is a portal which introduces a budding investor to the thrills & excitement of real time stock trading in a risk free environment. A user friendly tool, the portal provides virtual money which can be used for trading shares using their real time current prices, thus creating an understanding of the dynamics & the niftiness of the stock market. <b class="text-danger">Livestock</b> places the chip on the user's shoulder by creating a arena where learning is easy & getting a grasp on trading basics is done in an effective & enjoyable manner. The users inch forward into the real time trading world with added confidence & ever so needed sharpness.
 													    </big>
 													</p>
 												</label>	
