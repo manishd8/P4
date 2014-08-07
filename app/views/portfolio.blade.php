@@ -180,6 +180,7 @@
 			topDivElement.setAttribute("id", "Sell_Body_div");
 			parentNode.appendChild( topDivElement );
 
+			var isAnyChecked = false;
 	  		for(var i=1; i<rows.length; ++i) { 
 	  				var currCheck_id =  "StockToSell_id"+i; 
 
@@ -193,6 +194,7 @@
 
 	  				if(currCheckBox==true)
 	  				{
+	  					isAnyChecked = true;
 	  					var name = document.getElementById(td_stName_id).textContent;		
 	  					var currPrice = document.getElementById(td_Price_id).textContent;	
 	  					var numUnits = document.getElementById(td_Units_id).textContent;		
@@ -254,6 +256,9 @@
 						topDivElement.appendChild(mybr3);
 	  				}
 	  		}
+
+	  		if(!isAnyChecked)
+	  			alert("Please check stock to sell");
 		}
 
 		function OnCheckAllChange(){

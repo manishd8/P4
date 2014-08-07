@@ -13,43 +13,57 @@
 
 Route::get('/', function()
 {
-	return View::make('Index');
+	if(Auth::check())
+		return Redirect::to('/portfolio')->with('flash_message', 'Welcome to LiveStock!');
+
+	return View::make('/login');
 });
 
 
 
 Route::get('/login', function()
 {
+	if(Auth::check())
+		return Redirect::to('/portfolio')->with('flash_message', 'Welcome to LiveStock!');
+
 	return View::make('login');
 });
 
 
 Route::get('/portfolio', array('before' => 'auth', function()
 {
-	$UsrStocks = DB::table('userstocks')->where('user_id', Auth::user()['id'])->get();
+	if(Auth::check())
+	{
+		$UsrStocks = DB::table('userstocks')->where('user_id', Auth::user()['id'])->get();
 
-	$retuenArray = array();
-	foreach($UsrStocks as $UsrStock) {
-		$values = array();
-		$Stock = DB::table('stocks')->where('id', $UsrStock->stock_id)->first();
-    	array_push($values, $Stock->stock_name);
-    	array_push($values, $Stock->stock_symb);
+		$retuenArray = array();
+		foreach($UsrStocks as $UsrStock) {
+			$values = array();
+			$Stock = DB::table('stocks')->where('id', $UsrStock->stock_id)->first();
+	    	array_push($values, $Stock->stock_name);
+	    	array_push($values, $Stock->stock_symb);
 
-	    $httpreq = 'http://finance.yahoo.com/d/quotes.csv?s=';
-	    $httpreq.=$Stock->stock_symb;
-	    $httpreq.="&f=snl1";
-	    $json = file_get_contents($httpreq);
-	    $data = explode("\n",$json);
-	    $data_stock = explode("\",",$data['0']);	
+		    $httpreq = 'http://finance.yahoo.com/d/quotes.csv?s=';
+		    $httpreq.=$Stock->stock_symb;
+		    $httpreq.="&f=snl1";
+		    $json = file_get_contents($httpreq);
+		    $data = explode("\n",$json);
+		    $data_stock = explode("\",",$data['0']);	
 
-	    array_push($values, $data_stock['2']);
-	    array_push($values, $UsrStock->num_units);
-	
-	    array_push($retuenArray, $values);
-	}
+		    array_push($values, $data_stock['2']);
+		    array_push($values, $UsrStock->num_units);
+		
+		    array_push($retuenArray, $values);
+		}
 
-	return View::make('portfolio')->with('User_Stocks', $retuenArray)
+		return View::make('portfolio')->with('User_Stocks', $retuenArray)
 								  ->with('AccountCash' , Auth::user()['Cash']);
+	}
+		
+
+	return Redirect::to('/login')->with('flash_message', 'Please login first!');
+
+	
 }));
 
 
@@ -58,11 +72,12 @@ Route::get('/portfolio', array('before' => 'auth', function()
 -------------------------------------------------------------------------------------------------*/
 Route::post('/portfolio', array('before' => 'csrf', function() {
 
-	if(Input::only('search_id') == null)
-		return 'InSearchStock';
+	if(Auth::check())
+		return View::make('portfolio')->with('User_Stocks', $retuenArray)
+								  ->with('AccountCash' , Auth::user()['Cash']);
 
-	return Input::only('id');
-
+	return Redirect::to('/login')->with('flash_message', 'Please login first!');
+	
 }));
 
 
@@ -276,7 +291,7 @@ Route::get('/logout', function() {
 	Auth::logout();
 
 	# Send them to the homepage
-	return Redirect::to('/');
+	return Redirect::to('/login');
 
 });
 
@@ -285,13 +300,20 @@ Route::get('/signup',
 			'before' => 'guest',
 			function() {
 
-		    	return View::make('signup');
+		    	return View::make('login');
 			}
 	)
 );
 
 
 Route::post('/signup', array('before' => 'csrf', function() {
+
+	if(Input::get('login_id') == "" && Input::get('password')=="")
+	{
+		return Redirect::to('/login')
+			->with('flash_message', 'Sign up failed; please try again.')
+			->withInput();
+	}
 	$user = new User;
 	$user->login_id    		 = Input::get('login_id');
 	$user->FirstName    	 = Input::get('FirstName');
@@ -305,7 +327,7 @@ Route::post('/signup', array('before' => 'csrf', function() {
 		$user->save();
 	}
 	catch (Exception $e) {
-		return Redirect::to('/signup')
+		return Redirect::to('/login')
 			->with('flash_message', 'Sign up failed; please try again.')
 			->withInput();
 	}
@@ -313,7 +335,7 @@ Route::post('/signup', array('before' => 'csrf', function() {
 	# Log in
 	Auth::login($user);
 
-	return Redirect::to('/portfolio')->with('flash_message', 'Welcome to PlayStock!');
+	return Redirect::to('/portfolio')->with('flash_message', 'Welcome to LiveStock!');
 }));
 
 

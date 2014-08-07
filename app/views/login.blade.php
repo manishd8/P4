@@ -28,7 +28,7 @@
 
 										<div class="pull-right">
 											<input type="submit" name="login" class="btn btn-primary" value="login">
-											<a class="btn btn-info" role="button" data-toggle="modal" href="/signup">register</a>
+											<a class="btn btn-info" role="button" data-toggle="modal" data-target="#signUp" href="#">register</a>
 										</div>
 
 									</fieldset>
@@ -46,15 +46,14 @@
 	</div>
 @stop
 
+@section('footer')
 
-<!-- @section('footer')
-	<div id="register" class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-
+<div id="signUp" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="false">
 		<div class="modal-dialog">
 
 			<div class="modal-content">
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="false">
 						&times;
 					</button>
 
@@ -64,46 +63,51 @@
 				</div>
 
 				<div class="modal-body">
-					<form action="/signup" method="POST">
+					<!-- <form action="/signup" method="POST"> -->
+					{{ Form::open(array('url' => '/signup')) }}
 						<fieldset >
 								<div class="row form-inline">
 									
 									<div class="col-md-12">
 
-										<select class="col-md-1 form-control form-group">
-											<option>Mr.</option>
-											<option>Mrs.</option>
-											<option>Miss.</option>
+										<select name="Title" class="col-md-1 form-control form-group">
+											<option>Mr</option>
+											<option>Mrs</option>
+											<option>Ms</option>
+											<option>Miss</option>
 
 										</select>
 										<div class="col-md-5">
-											<input type="text" class="form-control form-group"  placeholder="First Name">
+											<input type="text" class="form-control form-group" name="FirstName" placeholder="First Name">
 										</div>
 										<div class="col-md-5">
-											<input type="text" class="form-control form-group" placeholder="Last Name">
+											<input type="text" class="form-control form-group" name="LastName" placeholder="Last Name">
 										</div>
 									</div></br></br></br>
 								</div>
 								
 								<div class="row col-md-7"  >
-									<input type="text" class="form-control form-group" placeholder="User Name">
+									<input type="text" class="form-control form-group" name="login_id" placeholder="User Name">
 							
-									<input type="password" class="form-control form-group" placeholder="Password">
+									<input type="password" class="form-control form-group" name="password" placeholder="Password">
 								</div>
 								
 							
-						</fieldset>						
+						</fieldset>					
 
-					</form>
+						<button class="btn btn-success" type="submit">signup</button>
+						<!-- <button class="btn btn-danger" data-target="/login">cancel</button> -->
+						<button class="btn btn-danger" data-dismiss="modal" aria-hidden="false">cancel</button>
+					<!-- </form> -->
+					{{ Form::close() }}
 				</div>
 
 				<div class="modal-footer">
-						<button class="btn btn-success" name="signup">signup</button>
-						<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">cancel</button>
 						
+							
 				</div>
 			</div>
 		</div>
-	</div>
+</div>
 
-@stop -->
+@stop

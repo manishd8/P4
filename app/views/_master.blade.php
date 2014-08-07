@@ -11,6 +11,19 @@
 
 		@yield('ajax')
 
+		<style type="text/css">
+			.flash-message {
+				width:20%;
+				position:absolute;
+				top:0;
+				left:0;
+				background-color:yellow;
+				text-align:left;
+				padding:5px;
+			}
+
+
+		</style>
 		<script language="JavaScript" type="text/javascript">
 
 			function start(){
@@ -58,30 +71,6 @@
 							h31.appendChild( name );
 				
 							topDivElement.appendChild( label1 );
-
-					  //   	var label1 = document.createElement("label");
-					  //   	var label2 = document.createElement("label");
-
-					  //   	var h31 = document.createElement("h3");
-					  //   	var h32 = document.createElement("h3");
-
-					  //   	label1.appendChild( h31 );
-					    	
-							// label2.appendChild( h32 );
-							
-
-							// var stkID = nameVallist[0];
-							// stkID = stkID.substring(1);
-							// var stkVal = nameVallist[1];
-					  //   	var name = document.createTextNode(stkID);
-					  //   	var value = document.createTextNode(stkVal);
-							// h31.appendChild( name );
-							// h31.appendChild(  document.createTextNode("  ==  ") );
-							// h32.appendChild( "  "+value );
-							// h32.appendChild(  document.createTextNode(" ,     ") );
-
-							// topDivElement.appendChild( label1 );
-							// topDivElement.appendChild( label2 );
 					    }
 				    }
 			    }
@@ -99,6 +88,11 @@ body {
 
 
 	<body onload="start()">
+
+		@if(Session::get('flash_message'))
+			<div class='flash-message'>{{ Session::get('flash_message') }}</div>
+		@endif
+
 		<div class="container text-info">
 			<header class="row"> 
 
@@ -107,16 +101,14 @@ body {
 							<nav class="navbar navbar-default">
 								<div class="col-md-7">
 									<div class="navbar-header">
-											<a href="#" class="navbar-brand">LiveStock</a>
+											<a class="navbar-brand">LiveStock</a>
 									</div>
 
 									<ul class="nav navbar-nav">
 											<li class="divider-vertical"></li>
-											<li><a href="#">Home</a></li>
+											<li><a href="/portfolio">My Portfolio</a></li>
 											<li class="divider-vertical"></li>
-											<li><a href="#">Blog</a></li>
-											<li class="divider-vertical"></li>
-											<li><a href="#">about</a></li>
+											<li><a data-toggle="modal" data-target="#aboutInfo" href="#">about</a></li>
 											<li class="divider-vertical"></li>
 
 											<li class ="dropdown">
@@ -125,11 +117,11 @@ body {
 													<b class="caret"></b>
 												</a>
 												<ul class="dropdown-menu">
-													<li><a href="#">twitter</a></li>
-													<li><a href="#">facebook</a></li>
-													<li><a href="#">google+</a></li>
+													<li class="disabled"><a href="#">twitter</a></li>
+													<li class="disabled"><a href="#">facebook</a></li>
+													<li class="disabled"><a href="#">google+</a></li>
 													<li class="divider"></li>
-													<li><a href="#">contact</a></li>
+													<li><a data-toggle="modal" data-target="#contactInfo" href="#">contact</a></li>
 												</ul>
 											</li>
 											<li class="divider-vertical"></li>
@@ -168,9 +160,9 @@ body {
 					</div>
 
 
-			</header>
+			</header> </br></br></br>
 
-			<marquee scrollAmount= "6" onmouseover="this.setAttribute('scrollamount', 0, 0);" onmouseout="this.setAttribute('scrollamount', 6, 0);">
+			<marquee scrollAmount= "8" onmouseover="this.setAttribute('scrollamount', 0, 0);" onmouseout="this.setAttribute('scrollamount', 8, 0);">
 
 				<div class="col-md-12 text-center text-success" id="marqueeDiv_id">
 					
@@ -182,6 +174,112 @@ body {
 			
 			
 
+		</div>
+
+		<div id="aboutInfo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="false">
+			<div class="modal-dialog">
+
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="false">
+							&times;
+						</button>
+
+						<h3 class="modal-title text-center" id="myModalLabel">About LiveStock</h3>
+
+						
+					</div>
+
+					<div class="modal-body">
+							<fieldset >
+									<div class="row form-inline">
+										
+										<div class="col-md-12">
+
+												<label>
+													<p class="text-justify"> 
+														<big>
+															<b class="text-danger">Livestock</b> is a portal which introduces a budding investor to the thrills & excitement of real time stock trading in a risk free environment. A user friendly tool, the portal provides virtual money which can be used for trading shares using their real time current prices, thus creating an understanding of the dynamics & the niftiness of the stock market. <b class="text-danger">Livestock</b> places the chip on the user's shoulder by creating a arina where learning is easy & getting a grasp on trading basics is done in an effective & enjoyable manner. The users inch forward into the real time trading world with added confidence & ever so needed sharpness.
+													    </big>
+													</p>
+												</label>	
+
+										</div>	</br></br></br>			
+
+									</div>									
+								
+							</fieldset>					
+							
+					</div>
+
+				    <div class="modal-footer">
+							
+								<button class="btn btn-danger pull-right" data-dismiss="modal" aria-hidden="false">cancel</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="contactInfo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="false">
+			<div class="modal-dialog">
+
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="false">
+							&times;
+						</button>
+
+						<h3 class="modal-title" id="myModalLabel">Contact Info</h3>
+
+						
+					</div>
+
+					<div class="modal-body">
+							<fieldset >
+									<div class="row form-inline">
+										
+										<div class="col-md-12">
+
+											<div class="col-md-5">
+												<label>
+													<h4>Phone No</h4>
+												</label>
+											</div>
+
+											<div class="col-md-4 pull-right">
+												<label>
+													<output class="disabled" id="id_buy_text">9876543210</output>
+												</label>
+											</div>		
+										</div>	</br></br></br>			
+
+										<div class="col-md-12">
+
+											<div class="col-md-4">
+												<label>
+													<h4>Email ID</h4>
+												</label>
+											</div>
+
+											<div class="col-md-5 pull-right">
+												<label>
+													<output class="disabled" id="id_buy_text">manishgo81@gmail.com</output>
+												</label>
+											</div>		
+										</div>	</br></br></br>				
+									</div>
+									
+								
+							</fieldset>					
+							
+					</div>
+
+				    <div class="modal-footer">
+							
+								<button class="btn btn-danger pull-right" data-dismiss="modal" aria-hidden="false">cancel</button>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		@yield('footer')

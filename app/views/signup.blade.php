@@ -55,7 +55,8 @@
 						</fieldset>					
 
 						<button class="btn btn-success" type="submit">signup</button>
-						<button class="btn btn-danger" data-target="/login">cancel</button>
+						<!-- <button class="btn btn-danger" data-target="/login">cancel</button> -->
+						<button class="btn btn-danger" data-dismiss="modal" aria-hidden="false">cancel</button>
 					<!-- </form> -->
 					{{ Form::close() }}
 				</div>
