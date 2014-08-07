@@ -48,10 +48,10 @@
 							var stkID = nameVallist[0];
 							stkID = stkID.substring(1);
 							displayStr+=stkID;
-					    	displayStr+="= ";
+					    	displayStr+="(";
 					    	
 					    	displayStr+=nameVallist[1];
-					    	displayStr+=".....";
+					    	displayStr+=").....";
 
 					    	var name = document.createTextNode(displayStr);
 					   
@@ -98,7 +98,7 @@ body {
 	</head>
 
 
-	<body onload="start()" background>
+	<body onload="start()">
 		<div class="container text-info">
 			<header class="row"> 
 

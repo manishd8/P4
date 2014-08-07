@@ -67,11 +67,37 @@ Route::post('/portfolio', array('before' => 'csrf', function() {
 
 
 Route::post('/searchStockName', function() {
-	$st_sym = Input::get('Stock_Str');
+	//$st_sym = Input::get('Stock_Str');
+	$flag = true;
+	$retVal = "";
+	//$serStk = DB::table('stocks')->where('stock_name', 'LIKE', "%$st_sym%")->get();
+	$serStk = DB::table('stocks')->where('id', '>', 0)->get();
 
-	$serStk = DB::table('stocks')->where('stock_symb', $st_sym)->pluck('stock_name');
-	
-	return $serStk;
+	foreach ($serStk as $Stk) {
+		
+		if($flag)
+		{
+			$httpreq = 'http://finance.yahoo.com/d/quotes.csv?s=';
+			$httpreq.=$Stk->stock_symb;
+			$httpreq.="&f=snl1";
+			$json = file_get_contents($httpreq);
+			$data = explode("\n",$json);
+			$data_stock = explode("\",",$data['0']);	
+
+    		$retVal.= $data_stock['2'];
+
+			$flag = false;
+		}
+		
+		$retVal.="+";
+		
+
+		$retVal.=$Stk->stock_symb;
+		$retVal.="=";
+		$retVal.=$Stk->stock_name;
+	}
+
+	return $retVal;
 
 });
 
@@ -118,6 +144,51 @@ Route::post('/getStockPriceList', function() {
 			$firstSet = true;
 		}
 	}
+
+	return $return;
+
+});
+
+
+
+Route::post('/buySocksearch', function() {
+
+	$httpreq = 'http://finance.yahoo.com/d/quotes.csv?s=';
+	$stockID = Input::get("Stock1");
+
+	//$stkSymList = DB::table('stocks')->where('stock_symb', $stockID)->first();
+	$httpreq.=$stockID;
+	
+
+
+	$return = "";
+	$httpreq.="&f=snl1";
+	$firstSet = false;
+	$json = file_get_contents($httpreq);
+
+
+	$data = explode("\n",$json);
+
+	$data_count = count($data)-1;
+
+	for($j=0; $j<$data_count; ++$j)
+	{
+		$data_stock = explode("\",",$data[$j]);	
+
+		if($firstSet==true)
+		{
+			$return.="+";
+			$return.=$data_stock['2'];
+		}
+		else
+		{
+			$return=$data_stock['2'];
+			$firstSet = true;
+		}
+	
+	
+	}
+	
 
 	return $return;
 
@@ -250,6 +321,7 @@ Route::post('/signup', array('before' => 'csrf', function() {
 Route::post('/buy', array('before' => 'csrf', 'before' => 'auth', function() {
 	
 	$st_sym = Input::get('StockToBuy');
+
 	$serStk = DB::table('stocks')->where('stock_symb', $st_sym)->first()->id;
 
 	$userStocks = DB::table('userstocks')
