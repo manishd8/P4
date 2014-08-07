@@ -3,9 +3,9 @@
 @section('ajax')
 	<script language="JavaScript" type="text/javascript">
 		function ajax_post(){
-		    // Create our XMLHttpRequest object
+		   
 		    var hr = new XMLHttpRequest();
-		    // Create some variables we need to send to our PHP file
+		  
 		    var url = "socksearch";
 		    var id1 = document.getElementById("stock_id1").value;
 		    var id2 = document.getElementById("stock_id2").value;
@@ -14,9 +14,8 @@
 		    var id5 = document.getElementById("stock_id5").value;
 		    var vars = "Stock1="+id1+"&Stock2="+id2+"&Stock3="+id3+"&Stock4="+id4+"&Stock5="+id5;
 		    hr.open("POST", url, true);
-		    // Set content type header information for sending url encoded variables in the request
+		    
 		    hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		    // Access the onreadystatechange event for the XMLHttpRequest object
 		    hr.onreadystatechange = function() {
 			    if(hr.readyState == 4 && hr.status == 200) {
 				    var return_data = hr.responseText;
@@ -28,8 +27,8 @@
 				    };
 			    }
 		    }
-		    hr.send(vars); // Actually execute the request
-		   //document.getElementById("stock_val1").innerHTML = "processing...";
+
+		    hr.send(vars); 
 		}
 
 		function SetDataToHiddenInput(){
@@ -44,17 +43,16 @@
 		
 		function buySearchPrice(){
 
-			 // Create our XMLHttpRequest object
 		    var hr = new XMLHttpRequest();
-		    // Create some variables we need to send to our PHP file
+		   
 		    var url = "buySocksearch";
 		    var id = document.getElementById("buy_dropdown").value;
 		  
 		    var vars = "Stock1="+id;
 		    hr.open("POST", url, true);
-		    // Set content type header information for sending url encoded variables in the request
+		    
 		    hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		    // Access the onreadystatechange event for the XMLHttpRequest object
+		    
 		    hr.onreadystatechange = function() {
 			    if(hr.readyState == 4 && hr.status == 200) {
 				    var return_data = hr.responseText;
@@ -63,8 +61,8 @@
 				    ComputeTotal();
 			    }
 		    }
-		    // Send the data to PHP now... and wait for response to update the status div
-		    hr.send(vars); // Actually execute the request
+		   
+		    hr.send(vars);
 		}
 
 		function ComputeTotal(){
@@ -97,17 +95,14 @@
 			
 			parentNode.appendChild( dropDown );
 
-			//var str = document.getElementById("id_buy_stock").value;
 			var url = "searchStockName";
 
-			 // Create our XMLHttpRequest object
 		    var hr = new XMLHttpRequest();
 
 		    var vars = "Stock_Str=val";
 		    hr.open("POST", url, true);
-		    // Set content type header information for sending url encoded variables in the request
+		  
 		    hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		    // Access the onreadystatechange event for the XMLHttpRequest object
 
 		    hr.onreadystatechange = function() {
 			    if(hr.readyState == 4 && hr.status == 200) {
@@ -138,14 +133,13 @@
 				    }
 			    }
 		    }
-		    // Send the data to PHP now... and wait for response to update the status div
-		    hr.send(vars); // Actually execute the request
+		  
+		    hr.send(vars);
 
 		}
 
 		function Sell_Stock(){
 
-			 // Create our XMLHttpRequest object
 		    var hr = new XMLHttpRequest();
 
 		   	var url = "sell";
@@ -383,7 +377,6 @@
 						<div class="col-md-1">
 						</div>
 						<div class="col-md-1">
-							<!-- <a class="btn-lg btn-danger" role="button" href="#" onclick="Create_SellPage();" data-toggle="modal" data-target="#sell">Sell</a> -->
 						</div>
 
 						<div class="col-md-6">
@@ -391,7 +384,6 @@
 
 						<div class="col-md-3 pull-right">
 								<a class="btn-lg btn-danger" role="button" href="#" onclick="Create_SellPage();" data-toggle="modal" data-target="#sell">Sell</a>
-								<!-- <a class="btn-lg btn-info" role="button" href="#" data-toggle="modal" data-target="#search">Search</a> -->
 								<a class="btn-lg btn-success" role="button" href="#" data-toggle="modal" data-target="#buy" onclick="SearchStockFromStr();">Buy Stock</a>
 						</div>	
 					</div>
@@ -536,11 +528,9 @@
 						</fieldset>					
 
 						<div class="pull-right">
-							<!-- <button name="SearchStock" id="SchStk" class="btn btn-success" onClick="javascript:ajax_post();">search</button> -->
 							<input name="Search" class="btn btn-success" type="submit" value="Get Data" onClick="javascript:ajax_post();">
 							<button class="btn btn-danger" data-dismiss="modal" aria-hidden="false">cancel</button>
 						</div></br>
-					<!-- </form> -->
 					
 				</div>
 

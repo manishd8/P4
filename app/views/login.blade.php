@@ -12,7 +12,6 @@
 
 					<div class="well">
 
-							<!-- <form action="/login" method="POST"> -->
 							{{ Form::open(array('url' => '/login')) }}
 
 									<fieldset>
@@ -33,7 +32,6 @@
 
 									</fieldset>
 
-							<!-- </form> -->
 							{{ Form::close() }}
 
 					</div>
@@ -63,7 +61,6 @@
 				</div>
 
 				<div class="modal-body">
-					<!-- <form action="/signup" method="POST"> -->
 					{{ Form::open(array('url' => '/signup')) }}
 						<fieldset >
 								<div class="row form-inline">
@@ -95,9 +92,7 @@
 						</fieldset>					
 
 						<button class="btn btn-success" type="submit">signup</button>
-						<!-- <button class="btn btn-danger" data-target="/login">cancel</button> -->
 						<button class="btn btn-danger" data-dismiss="modal" aria-hidden="false">cancel</button>
-					<!-- </form> -->
 					{{ Form::close() }}
 				</div>
 

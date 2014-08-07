@@ -74,9 +74,8 @@
 					    }
 				    }
 			    }
-
-			    // Send the data to PHP now... and wait for response to update the status div
-			    hr.send(); // Actually execute the request
+			    
+			    hr.send();
 			}
 		</script>
 		<style type="text/css">

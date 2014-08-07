@@ -26,7 +26,7 @@ Route::get('/login', function()
 	if(Auth::check())
 		return Redirect::to('/portfolio')->with('flash_message', 'Welcome to LiveStock!');
 
-	return View::make('login');
+	return View::make('login')->with('flash_message', 'Invalid Login ID or Password!');
 });
 
 
@@ -269,7 +269,7 @@ Route::post('/socksearch', function() {
 -------------------------------------------------------------------------------------------------*/
 Route::post('/login', array('before' => 'csrf', function() {
 
-	if(Input::get('login_id') == "" && Input::get('password')=="")
+	if(Input::get('login_id') == "" || Input::get('password')=="")
 	{
 		return Redirect::to('/login')
 			->with('flash_message', 'Sign up failed; please try again.')
