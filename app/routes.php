@@ -269,6 +269,13 @@ Route::post('/socksearch', function() {
 -------------------------------------------------------------------------------------------------*/
 Route::post('/login', array('before' => 'csrf', function() {
 
+	if(Input::get('login_id') == "" && Input::get('password')=="")
+	{
+		return Redirect::to('/login')
+			->with('flash_message', 'Sign up failed; please try again.')
+			->withInput();
+	}
+
 	$credentials   = Input::only('login_id', 'password');
 
 	if (Auth::attempt($credentials, $remember = false)) {
